@@ -45,9 +45,24 @@ const deleteFood = async (req, res) => {
   
       res.status(200).send({ message: "Food item successfully deleted", food });
     } catch (error) {
-      res.status(500).send({ message: "Server error", error: error.message });
+      res.status(400).send({ message: "Server error", error: error.message });
     }
   };
 
 
-module.exports = {addFood , deleteFood , getFood}
+  const updateFood = async(req, res) => {
+   try {
+    const {foodName , price} = req.body
+    console.log(req.params.id)
+    const updateFood = await Food.findByIdAndUpdate(req.params.id , {foodName , price} , {new:true})
+    if(!updateFood){
+      res.status(403).send({message:"Food not Update try angin"})
+    }
+    res.send( updateFood)
+   } catch (error) {
+    res.status(400).send({ message: "Server error", error: error.message });
+   }
+  }
+
+
+module.exports = {addFood , deleteFood , getFood , updateFood }
